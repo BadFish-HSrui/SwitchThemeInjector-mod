@@ -41,11 +41,11 @@ private:
 
 	void ParseFont()
 	{
-		lblLine2 = ("Custom font");
+		lblLine2 = ("自定义字体");
 		auto fontName = SwitchThemesCommon::TTF::GetFontName(file);
 		_CanInstall = fontName != "";
-		CannotInstallReason = "Invalid font file";
-		lblFname = (CanInstall() ? fontName : "Invalid font :(");
+		CannotInstallReason = "无效的字体文件";
+		lblFname = (CanInstall() ? fontName : "无效字体 :(");
 		lblLine1 = (fs::GetFileName(FileName));
 	}
 };

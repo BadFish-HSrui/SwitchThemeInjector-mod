@@ -30,21 +30,21 @@ void RemoteInstall::DetailPage::Render(int X, int Y)
 	const float BtnW = SCR_W / 3.0f;
 
 	ImGui::SetCursorPosX(SCR_W / 2 - BtnW / 2);
-	if (ImGui::Button("Install", ImVec2(BtnW, 0)))
+	if (ImGui::Button("安装", ImVec2(BtnW, 0)))
 		UserDownload(Action::DownloadInstall);
 	Utils::ImGuiSelectItemOnce();
 	
 	ImGui::SetCursorPosX(SCR_W / 2 - BtnW / 2);
-	if (ImGui::Button("Install but don't save to the SD card", ImVec2(BtnW, 0)))
+	if (ImGui::Button("安装但不保存到SD卡", ImVec2(BtnW, 0)))
 		UserDownload(Action::Install);
 	
 	ImGui::SetCursorPosX(SCR_W / 2 - BtnW / 2);
-	if (ImGui::Button("Just download", ImVec2(BtnW, 0)))
+	if (ImGui::Button("仅下载", ImVec2(BtnW, 0)))
 		UserDownload(Action::Download);
 	
 	ImGui::NewLine();
 	ImGui::SetCursorPosX(SCR_W / 2 - BtnW / 2);
-	if (ImGui::Button("Cancel", ImVec2(BtnW, 0)))
+	if (ImGui::Button("取消", ImVec2(BtnW, 0)))
 		PopPage(this);
 
 	ImGui::End();
@@ -66,7 +66,7 @@ void RemoteInstall::DetailPage::UserDownload(Action action)
 		auto entry = ThemeEntry::FromSZS(theme);
 		if (!entry->CanInstall())
 		{
-			DialogBlocking("This theme is not valid");
+			DialogBlocking("此主题无效");
 			return;
 		}
 
@@ -74,7 +74,7 @@ void RemoteInstall::DetailPage::UserDownload(Action action)
 		{
 			fs::EnsureDownloadsFolderExists();
 			std::string name = fs::path::DownloadsFolder + fs::SanitizeName(this->entry.Name) + ".nxtheme";
-			if (fs::Exists(name) && !YesNoPage::Ask("A file called " + name + " already exists on the sd card, do you want to replace it ?"))
+			if (fs::Exists(name) && !YesNoPage::Ask("SD卡上已存在名为 " + name + " 的文件，是否要替换它？"))
 			{
 				if (action == Action::Download) // If the user asked to download the theme don't close the page, otherwise just install it
 					return;

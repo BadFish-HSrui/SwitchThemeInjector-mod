@@ -129,7 +129,7 @@ void ThemesPage::SetPage(int num, int index)
 		if (baseIndex >= DirectoryFiles.size())
 		{
 			// This shouldn't happen
-			lblPage = "Error page out of bounds";
+			lblPage = "错误 页面超出范围";
 			return;
 		}
 

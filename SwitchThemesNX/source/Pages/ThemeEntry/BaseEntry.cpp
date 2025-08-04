@@ -15,7 +15,7 @@ using namespace SwitchThemesCommon;
 
 void ThemeEntry::DisplayInstallDialog(const std::string& path)
 {
-	DisplayLoading({ "Installing " + path + " ...", "CFW folder: " + fs::path::CfwFolder() });
+	DisplayLoading({ "正在安装 " + path + " ...", "CFW 文件夹: " + fs::path::CfwFolder() });
 }
 
 class DummyEntry : public ThemeEntry 
@@ -44,7 +44,7 @@ bool ThemeEntry::Install(bool ShowDialogs)
 	if (!CanInstall())
 	{
 		// Sometimes ::Install is called automatically eg RemoteInstall/Detail.cpp, it would fail silently if CanInstall() == false
-		DialogBlocking(CannotInstallReason == "" ? "This theme can't be installed." : CannotInstallReason);
+		DialogBlocking(CannotInstallReason == "" ? "此主题无法安装。" : CannotInstallReason);
 		return false;
 	}
 
@@ -57,16 +57,16 @@ bool ThemeEntry::Install(bool ShowDialogs)
 	}
 	catch (const exception & ex)
 	{
-		DialogBlocking("Error while installing this theme: " + string(ex.what()) + "\n\n" + InstallLog);
+		DialogBlocking("安装此主题时出错：" + string(ex.what()) + "\n\n" + InstallLog);
 		return false;
 	}
 
 	if (ShowDialogs) 
 	{
 		if (InstallLog.empty())
-			DialogBlocking("Done, restart the console to apply the changes");
+			DialogBlocking("完成，请重新启动主机以应用更改");
 		else
-			DialogBlocking("Done, restart the console to apply the changes.\n\nThe following warnings were generated:\n" + InstallLog);
+			DialogBlocking("完成，请重新启动主机以应用更改。\n\n产生了以下警告：\n" + InstallLog);
 
 		// If !ShowDialogs keep the install log so it can be displayed by the caller
 		InstallLog.clear();
@@ -85,7 +85,7 @@ unique_ptr<ThemeEntry> ThemeEntry::FromFile(const std::string& fileName)
 	try {
 		if (filesystem::is_directory(fileName))
 		{
-			auto&& e = make_unique<DummyEntry>(fileName, fs::GetFileName(fileName), fileName, "folder");
+			auto&& e = make_unique<DummyEntry>(fileName, fs::GetFileName(fileName), fileName, "文件夹");
 			e->Folder = true;
 			return move(e);
 		}
@@ -93,7 +93,7 @@ unique_ptr<ThemeEntry> ThemeEntry::FromFile(const std::string& fileName)
 		vector<u8>&& data = fs::OpenFile(fileName);
 
 		if (data.size() == 0)
-			return make_unique<DummyEntry>(fileName, "Couldn't open this file", fileName, "ERROR");
+			return make_unique<DummyEntry>(fileName, "无法打开此文件", fileName, "错误");
 
 		if (StrEndsWith(fileName, ".ttf"))
 			return make_unique<FontEntry>(fileName, move(data));
@@ -104,14 +104,15 @@ unique_ptr<ThemeEntry> ThemeEntry::FromFile(const std::string& fileName)
 	}
 	catch (std::exception &ex)
 	{
-		return make_unique<DummyEntry>(fileName, "Error - " + std::string(ex.what()), fileName, "ERROR");
+		return make_unique<DummyEntry>(fileName, "错误 - " + std::string(ex.what()), fileName, "错误");
 	}
 	catch (...)
 	{
-		return make_unique<DummyEntry>(fileName, "Unknown exception while opening this file", fileName, "ERROR");
+		return make_unique<DummyEntry>(fileName, "打开此文件时出现未知异常", fileName, "错误");
 	}
 
-	return make_unique<DummyEntry>(fileName, "Unknown file type", fileName, "ERROR");
+	return make_unique<DummyEntry>(fileName, "未知文件类型", fileName, "错误");
+
 }
 
 unique_ptr<ThemeEntry> ThemeEntry::FromSZS(const std::vector<u8>& RawData)

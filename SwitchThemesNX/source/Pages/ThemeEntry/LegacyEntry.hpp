@@ -39,7 +39,7 @@ protected:
 		auto patch = SwitchThemesCommon::SzsPatcher::DetectSarc(SData);
 
 		if (!patch)
-			throw std::runtime_error("Couldn't find a compatible patch template");
+			throw std::runtime_error("找不到匹配的主题模板");
 
 		if (!PatchMng::ExefsCompatAsk(patch->szsName))
 			return false;
@@ -56,7 +56,7 @@ private:
 
 	LoadedImage GetPreview() override
 	{
-		throw std::runtime_error("Preview is not implemented for szs themes");
+		throw std::runtime_error("（“针对 szs 主题的预览功能尚未实现”）");
 	}
 
 	void ParseLegacyTheme(SARC::SarcData&& _Sdata)
@@ -65,7 +65,7 @@ private:
 		if (FileName == "")
 		{
 			lblFname = "Unknown.szs";
-			lblLine1 = "Remote install";
+			lblLine1 = "远程安装";
 		}
 		else
 		{
@@ -75,11 +75,11 @@ private:
 		auto patch = SwitchThemesCommon::SzsPatcher::DetectSarc(SData);
 		if (!patch)
 		{
-			lblLine2 = "Invalid theme";
-			CannotInstallReason = "Couldn't find a compatible patch template";
+			lblLine2 = "无效主题";
+			CannotInstallReason = "找不到兼容的补丁模板";
 			_CanInstall = false;
 		}
 
-		else lblLine2 = (patch->TemplateName + " for " + patch->FirmName);
+		else lblLine2 = (patch->TemplateName + " 适用于 " + patch->FirmName);
 	}
 };
