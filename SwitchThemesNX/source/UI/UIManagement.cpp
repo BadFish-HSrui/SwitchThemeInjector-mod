@@ -32,9 +32,22 @@ static bool ImguiInit()
 	ImGuiIO& io = ImGui::GetIO();
 	io.DisplaySize = ImVec2{ SCR_W, SCR_H};
 	
-	font25 = io.Fonts->AddFontFromFileTTF(ASSET("opensans.ttf"), 30.0f);
-	font30 = io.Fonts->AddFontFromFileTTF(ASSET("opensans.ttf"), 35.0f);
-	font40 = io.Fonts->AddFontFromFileTTF(ASSET("opensans.ttf"), 40.0f);
+	ImFontConfig fontConfig;
+	fontConfig.OversampleH = 1;
+	fontConfig.OversampleV = 1;
+	fontConfig.PixelSnapH = 1;
+	
+	static const ImWchar ranges[] = {
+		0x0020, 0x00FF, // Basic Latin + Latin Supplement
+		0x2000, 0x206F, // General Punctuation
+		0xFF00, 0xFFEF, // Half-width characters
+		0x4e00, 0x9FAF, // CJK Ideograms
+		0,
+	};
+	
+	font25 = io.Fonts->AddFontFromFileTTF(ASSET("opposans.ttf"), 30.0f, &fontConfig, ranges);
+	font30 = io.Fonts->AddFontFromFileTTF(ASSET("opposans.ttf"), 35.0f, &fontConfig, ranges);
+	font40 = io.Fonts->AddFontFromFileTTF(ASSET("opposans.ttf"), 40.0f, &fontConfig, ranges);
 
 	io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;
 	io.ConfigFlags |= ImGuiConfigFlags_IsTouchScreen;

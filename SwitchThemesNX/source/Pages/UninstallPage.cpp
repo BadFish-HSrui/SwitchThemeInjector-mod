@@ -6,7 +6,7 @@ using namespace std;
 
 UninstallPage::UninstallPage()
 {
-	Name = "Uninstall theme";
+	Name = "卸载主题";
 }
 
 void UninstallPage::Render(int X, int Y)
@@ -14,30 +14,30 @@ void UninstallPage::Render(int X, int Y)
 	Utils::ImGuiSetupPage(this, X, Y);
 	ImGui::PushFont(font30);
 
-	ImGui::TextWrapped("Use this to uninstall the currently installed themes.\nIf you have issues, you can try removing the whole LayeredFS folder and code patches.");
+	ImGui::TextWrapped("使用此功能卸载当前安装的主题。\n如果您遇到问题，可以尝试删除整个LayeredFS文件夹和代码补丁。");
 
 	ImGui::PushStyleColor(ImGuiCol_Button, u32(0x6B70000ff));
 	
-	auto i = Utils::ImGuiCenterButtons({ "Uninstall the current theme", "Uninstall everything" } , &firstBtn);
+	auto i = Utils::ImGuiCenterButtons({ "卸载当前主题", "卸载所有内容" } , &firstBtn);
 	if (i != -1)
 	{
 		PushFunction([i]() {
-			if (!YesNoPage::Ask("Are you sure ?")) return;
+			if (!YesNoPage::Ask("您确定吗？")) return;
 			if (i == 1)
 			{
-				DisplayLoading("Clearing LayeredFS dir...");
+				DisplayLoading("正在清除LayeredFS目录...");
 				fs::theme::UninstallTheme(true);
 				PatchMng::RemoveAll();
 				Dialog(
-					"Done, everything theme-related has been removed, restart your console to apply the changes.\n"
-					"As this removed the home menu patches as well you should restart this app before installing any theme."
+					"完成，所有与主题相关的内容已被删除，重启主机以应用更改。\n"
+					"由于这也删除了主菜单补丁，您应该在安装任何主题之前重新启动此应用。"
 				);
 			}
 			else
 			{
-				DisplayLoading("Loading...");
+				DisplayLoading("正在加载...");
 				fs::theme::UninstallTheme(false);
-				Dialog("Done, all the installed themes have been removed, restart your console to apply the changes");
+				Dialog("完成，所有已安装的主题已被删除，重启主机以应用更改");
 			}
 		});
 	}

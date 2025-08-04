@@ -34,12 +34,12 @@ void TextPage::Update()
 }
 
 CreditsPage::CreditsPage() :
-	creditsText("NXThemes installer by exelix - " + Version::Name + " - Core Ver." + SwitchThemesCommon::CoreVer +
-		'\n' + Version::Commit +
-		"\nSource: github.com/exelix11/SwitchThemeInjector"+
-		"\nDonations: ko-fi.com/exelix11\n\n")
+	creditsText("NXThemes安装器由exelix开发 - " + Version::Name + " - 核心版本" + SwitchThemesCommon::CoreVer +
+		"\n源代码: github.com/exelix11/SwitchThemeInjector"+
+		"\n捐赠: ko-fi.com/exelix11"+
+		"\n葡萄糖酸菜鱼 汉化\n\n")
 {
-	Name = "Credits";
+	Name = "关于";
 }
 
 extern void ShowFirstTimeHelp(bool WelcomeScr); //from main.cpp
@@ -53,18 +53,18 @@ void CreditsPage::Render(int X, int Y)
 
 	ImGui::PushFont(font25);
 	ImGui::TextWrapped(
-		"Thanks to:\n"
-		"Syroot for BinaryData lib\n"
-		"AboodXD for Bntx editor and sarc lib\n"
-		"shchmue for Lockpick\n"
-		"SciresM for hactool\n"
-		"Everyone from Atmosphere and libnx\n"
-		"switch-stuff on github for the font converter\n"
-		"Fincs for the hybrid_app template\n"
-		"Everyone from the DearImgui github repo"
+		"感谢:\n"
+		"Syroot 提供 BinaryData 库\n"
+		"AboodXD 提供 Bntx 编辑器和 sarc 库\n"
+		"shchmue 提供 Lockpick\n"
+		"SciresM 提供 hactool\n"
+		"Atmosphere 和 libnx 的所有贡献者\n"
+		"github 上的 switch-stuff 提供字体转换器\n"
+		"Fincs 提供 hybrid_app 模板\n"
+		"DearImgui github 仓库的所有贡献者"
 	);
 
-	if (ImGui::Button("Show first startup info"))
+	if (ImGui::Button("显示首次启动信息"))
 		PushFunction([]() {ShowFirstTimeHelp(false); });
 	PAGE_RESET_FOCUS;
 
@@ -78,4 +78,3 @@ void CreditsPage::Update()
 	if (Utils::PageLeaveFocusInput())
 		Parent->PageLeaveFocus(this);
 }
-

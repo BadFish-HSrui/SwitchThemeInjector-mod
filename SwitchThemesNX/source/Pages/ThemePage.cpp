@@ -18,7 +18,7 @@ ThemesPage::ThemesPage() : lblPage("")
 	if (UseLowMemory)
 		LimitLoad = 15;
 
-	Name = "Themes";
+	Name = "主题";
 	lblCommands = CommandsTextNormal;
 
 	RefreshThemesList();
@@ -156,9 +156,9 @@ void ThemesPage::Render(int X, int Y)
 
 	if (DisplayEntries.size() == 0)
 		ImGui::TextWrapped(
-			"There's nothing here, copy your themes in the themes folder on your sd and try again.\n\n"
-			"If you do have a themes folder in your sd with themes make sure that the name is all lowercase and that you don't have the archive bit issue (most likely if you use a mac) or sd corruption if you use exfat.\n\n"
-			"You can find more about those on google or ask for support on discord."
+			"这里什么都没有，请将您的主题复制到SD卡上的themes文件夹中，然后重试。\n\n"
+			"如果您在SD卡上有一个包含主题的themes文件夹，请确保名称全为小写，并且您没有归档位问题（如果您使用Mac最有可能出现）或者如果使用exfat则可能是SD卡损坏。\n\n"
+			"您可以在Bing上了解更多相关信息，或在Discord上寻求支持。"
 		);
 
 	ImGui::SetCursorPosY(600);
@@ -340,7 +340,7 @@ void ThemesPage::Update()
 
 			if (!entry->Install(false))
 			{
-				Dialog("Installing a theme failed, the process was cancelled");
+				Dialog("安装主题失败，进程已取消");
 				break;
 			}
 
@@ -354,7 +354,7 @@ void ThemesPage::Update()
 		}
 
 		if (!combinedInstallLog.empty())
-			Dialog("The themes were installed, however the following warnings have been generated: \n\n" + combinedInstallLog);
+			Dialog("主题已安装，但生成了以下警告: \n\n" + combinedInstallLog);
 
 		ClearSelection();
 		SetPage(pageNum);		

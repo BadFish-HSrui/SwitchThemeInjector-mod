@@ -30,12 +30,12 @@ void ExternalInstallPage::Render(int X, int Y)
 		ImGui::SetCursorPosY(80);
 
 		if (!installSuccess)
-			Utils::ImGuiCenterString("Theme(s) may have failed to install");
+			Utils::ImGuiCenterString("主题可能安装失败");
 		else
-			Utils::ImGuiCenterString("Installation completed.");
+			Utils::ImGuiCenterString("安装完成。");
 
 		ImGui::SetCursorPosY(SCR_H - 180);
-		auto res = Utils::ImGuiCenterButtons({ "Exit to homebrew launcher" ,"Reboot" });
+		auto res = Utils::ImGuiCenterButtons({ "退出到HBmenu" ,"重启" });
 		Utils::ImGuiSelectItemOnce(true);
 		if (res == 0)
 		{
@@ -49,10 +49,10 @@ void ExternalInstallPage::Render(int X, int Y)
 	else
 	{
 		ImGui::SetCursorPosY(10);
-		Utils::ImGuiCenterString("Install theme(s) from external source");
+		Utils::ImGuiCenterString("从外部源安装主题");
 
 		ImGui::SetCursorPosY(SCR_H - 50);
-		Utils::ImGuiCenterString("Press + to install, B to cancel");
+		Utils::ImGuiCenterString("按 + 安装，按 B 取消");
 
 		Utils::ImGuiSetupWin("ExtInstallPageContent", 20, 60, DefaultWinFlags & ~ImGuiWindowFlags_NoScrollbar);
 		ImGui::SetWindowSize({ SCR_W - 20, SCR_H - 110 });
@@ -85,7 +85,7 @@ void ExternalInstallPage::Update()
     {		
         if (KeyPressed(GLFW_GAMEPAD_BUTTON_START))
         {
-            DisplayLoading("Installing...");
+            DisplayLoading("正在安装...");
             for (int i=0; i < (int)ArgEntries.size(); i++)
             {
                 if(!ArgEntries[i]->Install(false)) installSuccess = false;

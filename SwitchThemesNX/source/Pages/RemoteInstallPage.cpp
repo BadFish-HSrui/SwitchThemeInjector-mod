@@ -22,9 +22,9 @@ RemoteInstallPage::~RemoteInstallPage()
 }
 
 RemoteInstallPage::RemoteInstallPage() : 
-BtnStart("Start remote install###InstallBtn")
+BtnStart("开始远程安装###InstallBtn")
 {
-	Name = "Download themes";
+	Name = "下载主题";
 	if (!UseLowMemory)
 	{
 		SetRemoteInstallCode("");
@@ -41,18 +41,18 @@ void RemoteInstallPage::Render(int X, int Y)
 	if (!RemoteInstallFile)
 	{
 		ImGui::PushFont(font40);
-		ImGui::Text("Download from the internet");
+		ImGui::Text("从互联网下载");
 		ImGui::PopFont();
 
 		if (UseLowMemory)
 		{
 			ImGui::PushStyleColor(ImGuiCol_Text, IM_COL32(255, 0, 0, 255));
-			ImGui::TextWrapped("This feature is not available while running in applet mode, launch with title takeover.");
+			ImGui::TextWrapped("此功能在小程序模式下不可用，请使用前端模式启动。");
 			ImGui::PopStyleColor();
 		}
 		else
 		{
-			ImGui::TextWrapped("Select a provider from the list to download themes.\nYou can add custom providers as explained in the wiki on Github.");
+			ImGui::TextWrapped("从列表中选择一个主题源来下载主题。\n您可以按照Github上的wiki说明添加自定义源。");
 			ImGui::PushItemWidth(500);
 			if (ImGui::Combo("###ProviderSelection", &ProviderIndex, ComboBoxApiProviderGetter, nullptr, RemoteInstall::API::ProviderCount()))
 				SelectedProviderStatic = RemoteInstall::API::GetProvider(ProviderIndex).Static;
@@ -63,16 +63,16 @@ void RemoteInstallPage::Render(int X, int Y)
 
 			if (!SelectedProviderStatic) {
 				ImGui::SameLine();
-				if (ImGui::Button("Random themes"))
+				if (ImGui::Button("随机主题"))
 					StartRemoteInstallFixed(RemoteInstall::FixedTypes::Random);
 				CurItemBlockLeft();
 				ImGui::SameLine();
-				if (ImGui::Button("New themes"))
+				if (ImGui::Button("最新主题"))
 					StartRemoteInstallFixed(RemoteInstall::FixedTypes::Recent);
 				CurItemBlockLeft();
 			}
 
-			ImGui::TextWrapped("Or search a theme by ID");
+			ImGui::TextWrapped("按ID搜索主题");
 			ImGui::PushStyleColor(ImGuiCol_Button, 0xDFDFDFDF);
 			ImGui::PushStyleColor(ImGuiCol_ButtonActive, 0xEFEFEFEF);
 			ImGui::PushStyleColor(ImGuiCol_ButtonHovered, 0xFFFFFFFF);
@@ -81,17 +81,17 @@ void RemoteInstallPage::Render(int X, int Y)
 				SetRemoteInstallCode(PlatformTextInput(RemoteInstallCode.c_str()));
 			ImGui::PopStyleColor(4);
 			ImGui::SameLine(0, 20);
-			if (ImGui::Button("Search###SearchBtn", { 150, 0 }) && RemoteInstallCode != "")
+			if (ImGui::Button("搜索###SearchBtn", { 150, 0 }) && RemoteInstallCode != "")
 				StartRemoteInstallByCode();
 			CurItemBlockLeft();
-			ImGui::TextWrapped("IDs are not names, searching a theme by name won't work, open your provider in the browser, select a theme and it should show its unique ID.");
+			ImGui::TextWrapped("ID不是名称，按名称搜索主题将不起作用，请在浏览器中打开您的源，选择一个主题，它应该会显示其唯一ID。");
 		}
 
 		ImGui::Spacing();
 		ImGui::Separator();
 		ImGui::Spacing();
 		ImGui::PushFont(font40);
-		ImGui::Text("Remote install from the theme injector");
+		ImGui::Text("从主题注入器远程安装");
 		ImGui::PopFont();
 	}
 
@@ -108,11 +108,11 @@ void RemoteInstallPage::Render(int X, int Y)
 		if (ImGui::IsWindowFocused())
 			Utils::ImGuiSelectItem();
 
-		ImGui::TextWrapped("Press A to install, B to cancel");
+		ImGui::TextWrapped("按A键安装，按B键取消");
 	}
 	else 
 	{
-		ImGui::TextWrapped("You can install a theme directly from your pc with the theme injector, go to the 'NXTheme builder' tab and click on 'Remote install...'");
+		ImGui::TextWrapped("您可以直接从电脑上的主题注入器安装主题，转到'NXTheme builder'选项卡并单击'远程安装...'");
 		if (ImGui::Button(BtnStart.c_str()))
 		{
 			if (!server.IsHosting())
@@ -121,8 +121,8 @@ void RemoteInstallPage::Render(int X, int Y)
 				StopServer();
 		}
 		if (UseLowMemory) PAGE_RESET_FOCUS;
-		ImGui::TextWrapped("Keep the menu focus on this page or requests won't be executed");
-		ImGui::Checkbox("Automatically install and reboot", &AutoInstall);
+		ImGui::TextWrapped("保持在此页面，否则请求将无法执行");
+		ImGui::Checkbox("自动安装并重启", &AutoInstall);
 	}
 	Utils::ImGuiSetWindowScrollable();
 
@@ -133,14 +133,14 @@ void RemoteInstallPage::StartRemoteInstallByCode()
 {
 	PushFunction([this]() {
 		try {
-			DisplayLoading("Loading...");
+			DisplayLoading("正在加载...");
 			RemoteInstall::Begin(SelectedProvider(), RemoteInstallCode);
 		}
 		catch (nlohmann::json::type_error& ex)	{
-			DialogBlocking("There was an error parsing the response from the server, this often mean that the code you requested could not be found, make sure that the code is valid.\n\nError message:\n"s + ex.what());
+			DialogBlocking("解析服务器响应时出错，这通常意味着您请求的代码找不到，请确保代码有效。\n\n错误信息:\n"s + ex.what());
 		}
 		catch (std::exception& ex) {
-			DialogBlocking("There was an error processing the request, make sure that the code is valid and that you are connected to the internet.\n\nError message:\n"s + ex.what());
+			DialogBlocking("处理请求时出错，请确保代码有效且您已连接到互联网。\n\n错误信息:\n"s + ex.what());
 		}
 	});
 }
@@ -149,11 +149,11 @@ void RemoteInstallPage::StartRemoteInstallFixed(RemoteInstall::FixedTypes type)
 {
 	PushFunction([this, type]() {
 		try {
-			DisplayLoading("Loading...");
+			DisplayLoading("正在加载...");
 			RemoteInstall::BeginType(SelectedProvider(), type);
 		}
 		catch (std::exception& ex) {
-			DialogBlocking("There was an error processing the request, make sure you are connected to the internet and try again in a bit, if it still doesn't work it's possible that the selected provider doesn't support this option.\n\nError message:\n"s + ex.what());
+			DialogBlocking("处理请求时出错，请确保您已连接到互联网，稍后再试，如果仍然不起作用，可能是所选源不支持此功能。\n\n错误信息:\n"s + ex.what());
 		}
 	});
 }
@@ -185,7 +185,7 @@ void RemoteInstallPage::SetRemoteInstallCode(const char* input)
 {
 	RemoteInstallCode = std::string(input);
 	if (RemoteInstallCode == "")
-		RemoteInstallBtnText = "Input text###themeIDinput";
+		RemoteInstallBtnText = "输入文本###themeIDinput";
 	else
 		RemoteInstallBtnText = RemoteInstallCode + "###themeIDinput";
 }
@@ -195,7 +195,7 @@ void RemoteInstallPage::StartServer()
 	try 
 	{
 		server.StartHosting();
-		BtnStart = ("IP: " + server.GetHostname() + " - Press to stop###InstallBtn");
+		BtnStart = ("IP: " + server.GetHostname() + " - 按此停止###InstallBtn");
 	}
 	catch (std::exception& ex)
 	{
@@ -206,12 +206,12 @@ void RemoteInstallPage::StartServer()
 void RemoteInstallPage::StopServer()
 {
 	server.StopHosting();
-	BtnStart = "Start remote install###InstallBtn";
+	BtnStart = "开始远程安装###InstallBtn";
 }
 
 void RemoteInstallPage::DialogError(const std::string &msg)
 {
-	Dialog("There was an error, try again.\n" + msg);
+	Dialog("出现错误，请重试。\n" + msg);
 }
 
 const RemoteInstall::Provider& RemoteInstallPage::SelectedProvider()
