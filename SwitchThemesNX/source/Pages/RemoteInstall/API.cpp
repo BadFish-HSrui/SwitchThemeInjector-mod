@@ -95,19 +95,15 @@ RemoteInstall::API::APIResponse RemoteInstall::API::GetManifest(const std::strin
 {
     AssertInitialized();
 
-    auto Response = ApiGet(url);
-
-    if (Response.count("data")) //graphql workaround
-        Response = Response["data"];
-
-    return Response.get<APIResponse>();
+    auto response = ApiGet(url);
+    return response.get<APIResponse>();
 }
 
 void RemoteInstall::API::ReloadProviders()
 {
     Providers.clear();
-    // Builtin providers -- should this be in romfs ?
-    Providers.push_back({ "Themezer.net", "https://api.themezer.net/?query=query($id:String!){nxinstaller(id:$id){groupname,themes{id,name,target,url,preview,thumbnail}}}&variables={\"id\":\"%%ID%%\"}", false });
+    // Builtin providers
+    Providers.push_back({ "Themezer.net", "https://api.themezer.net/switch/nxinstaller/%%ID%%", false });
     // Load extra providers from sd
     try
     {
@@ -185,6 +181,7 @@ CURL* RemoteInstall::API::Util::EasyGET(const std::string& url, std::vector<u8>&
     curl_easy_setopt(curl, CURLOPT_WRITEDATA, &out);
     curl_easy_setopt(curl, CURLOPT_PRIVATE, priv);
     curl_easy_setopt(curl, CURLOPT_USERAGENT, Version::UserAgent.c_str()); 
+    curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 1); 
 
     return curl;
 }
