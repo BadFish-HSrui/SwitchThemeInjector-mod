@@ -40,14 +40,15 @@ static bool ImguiInit()
 	static const ImWchar ranges[] = {
 		0x0020, 0x00FF, // Basic Latin + Latin Supplement
 		0x2000, 0x206F, // General Punctuation
+		0x3000, 0x30FF, // CJK Symbols and Punctuations, Hiragana, Katakana
 		0xFF00, 0xFFEF, // Half-width characters
 		0x4e00, 0x9FAF, // CJK Ideograms
 		0,
 	};
 	
-	font25 = io.Fonts->AddFontFromFileTTF(ASSET("opposans.ttf"), 30.0f, &fontConfig, ranges);
-	font30 = io.Fonts->AddFontFromFileTTF(ASSET("opposans.ttf"), 35.0f, &fontConfig, ranges);
-	font40 = io.Fonts->AddFontFromFileTTF(ASSET("opposans.ttf"), 40.0f, &fontConfig, ranges);
+	font25 = io.Fonts->AddFontFromFileTTF(ASSET("ChineseSimplified.ttf"), 25.0f, &fontConfig, ranges);
+	font30 = io.Fonts->AddFontFromFileTTF(ASSET("ChineseSimplified.ttf"), 30.0f, &fontConfig, ranges);
+	font40 = io.Fonts->AddFontFromFileTTF(ASSET("ChineseSimplified.ttf"), 38.0f, &fontConfig, ranges);
 
 	io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;
 	io.ConfigFlags |= ImGuiConfigFlags_IsTouchScreen;
